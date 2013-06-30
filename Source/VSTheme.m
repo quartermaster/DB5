@@ -117,7 +117,12 @@ static UIColor *colorWithHexString(NSString *hexString, NSNumber *alpha);
 		return cachedColor;
     
 	NSString *colorString = [self stringForKey:key];
-    NSNumber *number = [NSNumber numberWithFloat:[self floatForKey:[NSString stringWithFormat:@"%@Alpha", key]]];
+    NSNumber *number;
+    if ( [self objectForKey:[NSString stringWithFormat:@"%@Alpha", key]]) {
+        number = [NSNumber numberWithFloat:[self floatForKey:[NSString stringWithFormat:@"%@Alpha", key]]];
+    }
+
+    
 	UIColor *color = colorWithHexString(colorString, number);
 	if (color == nil)
 		color = [UIColor blackColor];
