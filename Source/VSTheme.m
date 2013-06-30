@@ -10,7 +10,7 @@
 
 
 static BOOL stringIsEmpty(NSString *s);
-static UIColor *colorWithHexString(NSString *hexString);
+static UIColor *colorWithHexString(NSString *hexString, NSNumber *alpha);
 
 
 @interface VSTheme ()
@@ -117,7 +117,8 @@ static UIColor *colorWithHexString(NSString *hexString);
 		return cachedColor;
     
 	NSString *colorString = [self stringForKey:key];
-	UIColor *color = colorWithHexString(colorString);
+    NSNumber *number = [NSNumber numberWithFloat:[self floatForKey:[NSString stringWithFormat:@"%@Alpha", key]]];
+	UIColor *color = colorWithHexString(colorString, number);
 	if (color == nil)
 		color = [UIColor blackColor];
 
@@ -262,8 +263,16 @@ static BOOL stringIsEmpty(NSString *s) {
 }
 
 
-static UIColor *colorWithHexString(NSString *hexString) {
+static UIColor *colorWithHexString(NSString *hexString, NSNumber *alpha) {
 
+    float a = 1.0f;
+    if ( alpha ) {
+        a = [alpha floatValue];
+    }
+    if ( a > 1.0f || a < 0.0f ) {
+        a = 1.0f;
+    }
+    
 	/*Picky. Crashes by design.*/
 	
 	if (stringIsEmpty(hexString))
