@@ -291,5 +291,5 @@ static UIColor *colorWithHexString(NSString *hexString, NSNumber *alpha) {
 	[[NSScanner scannerWithString:greenString] scanHexInt:&green];
 	[[NSScanner scannerWithString:blueString] scanHexInt:&blue];
 
-	return [UIColor colorWithRed:(CGFloat)red/255.0f green:(CGFloat)green/255.0f blue:(CGFloat)blue/255.0f alpha:1.0f];
+	return [UIColor colorWithRed:(CGFloat)red/255.0f green:(CGFloat)green/255.0f blue:(CGFloat)blue/255.0f alpha:a];
 }
