@@ -12,7 +12,7 @@ There is nothing magical about the code or the system: it’s some simple code p
 
 ### How it works
 
-See the demo app. You include two classes — VSThemeLoader and VSTheme — and DB5.plist. The plist is where you set values.
+See the demo app. You include two classes — VSThemeLoader and VSTheme — and DB5.plist. The plist is where you set values. You can use a JSON file too, if you prefer.
 
 At startup you load the file via VSThemeLoader, then access values via methods in VSTheme.
 

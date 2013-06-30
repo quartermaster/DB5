@@ -9,7 +9,6 @@
 #import "VSThemeLoader.h"
 #import "VSTheme.h"
 
-
 @interface VSThemeLoader ()
 
 @property (nonatomic, strong, readwrite) VSTheme *defaultTheme;
@@ -26,8 +25,18 @@
 	if (self == nil)
 		return nil;
 	
-	NSString *themesFilePath = [[NSBundle mainBundle] pathForResource:@"DB5" ofType:@"plist"];
-	NSDictionary *themesDictionary = [NSDictionary dictionaryWithContentsOfFile:themesFilePath];
+	NSString *filename = @"DB5";
+	NSDictionary *themesDictionary;
+	NSString *themesFilePath = [[NSBundle mainBundle] pathForResource:filename ofType:@"plist"];
+	if (themesFilePath != nil) {
+		themesDictionary = [NSDictionary dictionaryWithContentsOfFile:themesFilePath];
+	} else {
+		themesFilePath = [[NSBundle mainBundle] pathForResource:filename ofType:@"json"];
+		NSInputStream *stream = [NSInputStream inputStreamWithFileAtPath:themesFilePath];
+		[stream open];
+		themesDictionary = [NSJSONSerialization JSONObjectWithStream:stream options:0 error:nil];
+		[stream close];
+	}
 	
 	NSMutableArray *themes = [NSMutableArray array];
 	for (NSString *oneKey in themesDictionary) {
