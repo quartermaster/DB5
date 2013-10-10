@@ -11,6 +11,7 @@
 
 static BOOL stringIsEmpty(NSString *s);
 static UIColor *colorWithHexString(NSString *hexString);
+static UIColor *colorWithRGBAString(NSString *rgbaString);
 
 
 @interface VSTheme ()
@@ -117,7 +118,7 @@ static UIColor *colorWithHexString(NSString *hexString);
 		return cachedColor;
     
 	NSString *colorString = [self stringForKey:key];
-	UIColor *color = colorWithHexString(colorString);
+	UIColor *color = [colorString hasPrefix:@"rgba"] ? colorWithRGBAString(colorString) : colorWithHexString(colorString);
 	if (color == nil)
 		color = [UIColor blackColor];
 
@@ -283,4 +284,26 @@ static UIColor *colorWithHexString(NSString *hexString) {
 	[[NSScanner scannerWithString:blueString] scanHexInt:&blue];
 
 	return [UIColor colorWithRed:(CGFloat)red/255.0f green:(CGFloat)green/255.0f blue:(CGFloat)blue/255.0f alpha:1.0f];
+}
+
+static UIColor *colorWithRGBAString(NSString *rgbaString) {
+    static NSString* const kDB5RGBAStringPattern = @"^rgba\\(\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*(\\d{1}\\.\\d+)\\s*\\)$";
+    static NSRegularExpression *rgbaRegularExpression;
+    if (!rgbaRegularExpression) {
+        rgbaRegularExpression = [NSRegularExpression regularExpressionWithPattern:kDB5RGBAStringPattern options:NSRegularExpressionCaseInsensitive error:nil];
+    }
+
+    NSArray* matches = [rgbaRegularExpression matchesInString:rgbaString options:0 range:NSMakeRange(0, [rgbaString length])];
+    if ([matches count] != 1) {
+        return nil;
+    }
+    NSTextCheckingResult *result = [matches firstObject];
+    if (result.numberOfRanges != 5) {
+        return nil;
+    }
+    int red = [[rgbaString substringWithRange:[result rangeAtIndex:1]] intValue];
+    int green = [[rgbaString substringWithRange:[result rangeAtIndex:2]] intValue];
+    int blue = [[rgbaString substringWithRange:[result rangeAtIndex:3]] intValue];
+    CGFloat alpha = [[rgbaString substringWithRange:[result rangeAtIndex:4]] floatValue];
+    return [UIColor colorWithRed:(CGFloat)red/255.0f green:(CGFloat)green/255.0f blue:(CGFloat)blue/255.0f alpha:alpha];
 }
