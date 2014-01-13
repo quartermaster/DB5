@@ -116,8 +116,21 @@ static UIColor *colorWithHexString(NSString *hexString);
 	if (cachedColor != nil)
 		return cachedColor;
     
-	NSString *colorString = [self stringForKey:key];
-	UIColor *color = colorWithHexString(colorString);
+    UIColor *color;
+    if ([[self objectForKey:key] isKindOfClass:[NSDictionary class]]) {
+        NSDictionary *fontObject = (NSDictionary*)[self objectForKey:key];
+        if ([fontObject valueForKey:@"Color"]) {
+            NSString *colorString;
+            colorString = [fontObject valueForKey:@"Color"];
+            color = colorWithHexString(colorString);
+        }else{
+            color = [UIColor blackColor];
+        }
+    }else{
+        NSString *colorString = [self stringForKey:key];
+        color = colorWithHexString(colorString);
+    }
+    
 	if (color == nil)
 		color = [UIColor blackColor];
 
