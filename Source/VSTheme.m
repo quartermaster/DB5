@@ -116,8 +116,21 @@ static UIColor *colorWithHexString(NSString *hexString);
 	if (cachedColor != nil)
 		return cachedColor;
     
-	NSString *colorString = [self stringForKey:key];
-	UIColor *color = colorWithHexString(colorString);
+    UIColor *color;
+    if ([[self objectForKey:key] isKindOfClass:[NSDictionary class]]) {
+        NSDictionary *fontObject = (NSDictionary*)[self objectForKey:key];
+        if ([fontObject valueForKey:@"Color"]) {
+            NSString *colorString;
+            colorString = [fontObject valueForKey:@"Color"];
+            color = colorWithHexString(colorString);
+        }else{
+            color = [UIColor blackColor];
+        }
+    }else{
+        NSString *colorString = [self stringForKey:key];
+        color = colorWithHexString(colorString);
+    }
+    
 	if (color == nil)
 		color = [UIColor blackColor];
 
@@ -145,23 +158,38 @@ static UIColor *colorWithHexString(NSString *hexString);
 	if (cachedFont != nil)
 		return cachedFont;
     
-	NSString *fontName = [self stringForKey:key];
-	CGFloat fontSize = [self floatForKey:[key stringByAppendingString:@"Size"]];
+    NSString *fontName;
+    CGFloat fontSize = 1.0;
+    UIFont *font = nil;
+    if ([[self objectForKey:key] isKindOfClass:[NSDictionary class]]) {
+        NSDictionary *fontObject = (NSDictionary*)[self objectForKey:key];
+        if ([fontObject valueForKey:@"Size"]) {
+            fontSize = [[fontObject valueForKey:@"Size"] floatValue];
+        }
+        if ([fontObject valueForKey:@"Name"]) {
+            fontName = [fontObject valueForKey:@"Name"];
+        }
+    }else{
+        fontName = [self stringForKey:key];
+        fontSize = [self floatForKey:[key stringByAppendingString:@"Size"]];
+    }
 
-	if (fontSize < 1.0f)
-		fontSize = 15.0f;
-
-	UIFont *font = nil;
+    if (fontSize < 1.0f){
+        fontSize = 15.0f;
+    }
     
-	if (stringIsEmpty(fontName))
-		font = [UIFont systemFontOfSize:fontSize];
-	else
-		font = [UIFont fontWithName:fontName size:fontSize];
-
-	if (font == nil)
-		font = [UIFont systemFontOfSize:fontSize];
+    if (stringIsEmpty(fontName)){
+        font = [UIFont systemFontOfSize:fontSize];
+    }
+    else{
+        font = [UIFont fontWithName:fontName size:fontSize];
+    }
     
-	[self.fontCache setObject:font forKey:key];
+    if (font == nil){
+        font = [UIFont systemFontOfSize:fontSize];
+    }
+    
+    [self.fontCache setObject:font forKey:key];
 
 	return font;
 }
