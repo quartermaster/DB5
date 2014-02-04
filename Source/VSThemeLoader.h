@@ -16,6 +16,7 @@
 @property (nonatomic, strong, readonly) VSTheme *defaultTheme;
 @property (nonatomic, strong, readonly) NSArray *themes;
 
++ (VSThemeLoader*)sharedInstance;
 - (VSTheme *)themeNamed:(NSString *)themeName;
 
 @end

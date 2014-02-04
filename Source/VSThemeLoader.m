@@ -17,8 +17,17 @@
 @end
 
 
+static VSThemeLoader *singletonManager = nil;
+
 @implementation VSThemeLoader
 
++ (VSThemeLoader*)sharedInstance{
+    
+    if(singletonManager == nil)
+        singletonManager = [[super allocWithZone:NULL] init];
+    
+    return singletonManager;
+}
 
 - (id)init {
 	
