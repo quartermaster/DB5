@@ -6,8 +6,10 @@
 	<dict>
 		<key>backgroundColor</key>
 		<string>708090</string>
-		<key>labelTextColor</key>
+		<key>mainTextColor</key>
 		<string>ececec</string>
+		<key>labelTextColor</key>
+		<string>$mainTextColor</string>
 		<key>labelFont</key>
 		<string>Avenir-Medium</string>
 		<key>labelFontSize</key>
