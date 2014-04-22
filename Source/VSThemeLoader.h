@@ -16,6 +16,8 @@
 @property (nonatomic, strong, readonly) VSTheme *defaultTheme;
 @property (nonatomic, strong, readonly) NSArray *themes;
 
++ (id)newWithContentsOfFile:(NSString *)path;
++ (NSString*)defaultFilePath;
 - (VSTheme *)themeNamed:(NSString *)themeName;
 
 @end
