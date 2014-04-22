@@ -20,14 +20,31 @@
 @implementation VSThemeLoader
 
 
++ (id)newWithContentsOfFile:(NSString *)path {
+	
+	return [[self alloc] initWithContentsOfFile:path];
+}
+
+
++ (NSString*)defaultFilePath {
+	
+	return [[NSBundle mainBundle] pathForResource:@"DB5" ofType:@"plist"];
+}
+
+
 - (id)init {
+	
+	return [self initWithContentsOfFile:[[self class] defaultFilePath]];
+}
+
+
+- (id)initWithContentsOfFile:(NSString *)path {
 	
 	self = [super init];
 	if (self == nil)
 		return nil;
 	
-	NSString *themesFilePath = [[NSBundle mainBundle] pathForResource:@"DB5" ofType:@"plist"];
-	NSDictionary *themesDictionary = [NSDictionary dictionaryWithContentsOfFile:themesFilePath];
+	NSDictionary *themesDictionary = [NSDictionary dictionaryWithContentsOfFile:path];
 	
 	NSMutableArray *themes = [NSMutableArray array];
 	for (NSString *oneKey in themesDictionary) {
