@@ -16,6 +16,20 @@ typedef NS_ENUM(NSUInteger, VSTextCaseTransform) {
 };
 
 
+#define VSTHEME_CGFLOAT(theme, name, default)  \
+    CGFloat name = [theme floatForKey:@#name defaultValue:default]
+
+#define VSTHEME_NSINTEGER(theme, name, default)  \
+    NSUInteger name = [theme integerForKey:@#name defaultValue:default]
+
+#define VSTHEME_UICOLOR(theme, name, default)  \
+    UIColor* name = [theme colorForKey:@#name defaultValue:default]
+
+#define VSTHEME_UIFONT(theme, name, defaultName, defaultSize)   \
+    UIFont* name = [theme fontForKey:@#name defaultFontName:defaultName defaultFontSize:defaultSize]
+
+
+
 @class VSAnimationSpecifier;
 
 @interface VSTheme : NSObject

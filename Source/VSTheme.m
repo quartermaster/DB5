@@ -140,10 +140,15 @@ static UIColor *colorWithHexString(NSString *hexString);
 	if (cachedColor != nil)
 		return cachedColor;
     
+	UIColor *color = nil;
 	NSString *colorString = [self stringForKey:key];
-	UIColor *color = colorWithHexString(colorString);
-	if (color == nil)
+	if (colorString == nil) {
 		color = defaultValue;
+	} else {
+		color = colorWithHexString(colorString);
+		if (color == nil)
+			color = defaultValue;
+	}
 
 	[self.colorCache setObject:color forKey:key];
 
