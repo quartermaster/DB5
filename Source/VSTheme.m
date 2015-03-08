@@ -271,16 +271,25 @@ static UIColor *colorWithHexString(NSString *hexString) {
 
 	NSMutableString *s = [hexString mutableCopy];
 	[s replaceOccurrencesOfString:@"#" withString:@"" options:0 range:NSMakeRange(0, [hexString length])];
+    
+	if ([s length] == 6)
+	{
+		s = [[s stringByAppendingString:@"ff"] mutableCopy];
+    	}
+    
 	CFStringTrimWhitespace((__bridge CFMutableStringRef)s);
 
 	NSString *redString = [s substringToIndex:2];
 	NSString *greenString = [s substringWithRange:NSMakeRange(2, 2)];
 	NSString *blueString = [s substringWithRange:NSMakeRange(4, 2)];
+	NSString *alphaString = [s substringWithRange:NSMakeRange(6,2)];
 
-	unsigned int red = 0, green = 0, blue = 0;
+	unsigned int red = 0, green = 0, blue = 0, alpha = 0;
 	[[NSScanner scannerWithString:redString] scanHexInt:&red];
 	[[NSScanner scannerWithString:greenString] scanHexInt:&green];
 	[[NSScanner scannerWithString:blueString] scanHexInt:&blue];
+	[[NSScanner scannerWithString:alphaString] scanHexInt:&alpha];
 
-	return [UIColor colorWithRed:(CGFloat)red/255.0f green:(CGFloat)green/255.0f blue:(CGFloat)blue/255.0f alpha:1.0f];
+	return [UIColor colorWithRed:(CGFloat)red/255.0f green:(CGFloat)green/255.0f blue:(CGFloat)blue/255.0f alpha:(CGFloat)alpha/255.0f];
 }
+
